@@ -2,6 +2,7 @@
 - name: Check Status
   hosts: node1
   become: true
+  gather_facts: no
   vars:
     package: 
       - httpd
