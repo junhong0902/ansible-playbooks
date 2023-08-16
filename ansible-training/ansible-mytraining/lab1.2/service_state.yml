@@ -20,7 +20,7 @@
   #     #   - "{{ package }}"
 
   tasks:
-    - name: Check status of {{ package }} service
+    - name: Check status of "{{ package }}" service
       ansible.builtin.service_facts:
       register: service_state
 
