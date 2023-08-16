@@ -8,13 +8,13 @@
       - "sshd"
 
   tasks:
-    - name: Check status of {{ package }} service
+    - name: Check status of {{ item }} service
       ansible.builtin.service_facts:
       register: service_state
-      loop:
+      with_items:
         - "{{ package }}"
 
     - ansible.builtin.debug:
-        var: service_state.ansible_facts.services["{{ package }}.service"].state
-      loop:
+        var: service_state.ansible_facts.services["{{ item }}.service"].state
+      with_items:
         - "{{ package }}"
