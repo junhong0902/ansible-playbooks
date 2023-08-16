@@ -14,15 +14,6 @@
       register: service_state
 
     - ansible.builtin.debug:
-        # var: service_state.results
         var: service_state.ansible_facts.services["{{ item }}.service"].state
       with_items:
         - "{{ package }}"
-
-  # tasks:
-  #   - name: Check status of {{ package[0] }} service
-  #     ansible.builtin.service_facts:
-  #     register: service_state
-
-  #   - ansible.builtin.debug:
-  #       var: service_state.ansible_facts.services["{{ package }}.service"].state
