@@ -15,6 +15,6 @@
         - "{{ package }}"
 
     - ansible.builtin.debug:
-        var: service_state.ansible_facts.services["httpd.service"].state
+        var: service_state.ansible_facts.services["{{ item }}.service"].state
       with_items:
         - "{{ package }}"
