@@ -1,7 +1,7 @@
 ---
 - name: Apache server installed
   hosts: node1
-  become: yes
+  become: true
   tasks:
 
     - name: Install Apache
@@ -13,3 +13,9 @@
         name: httpd
         enabled: true
         state: started
+
+    - name: Copy index.html
+      ansible.builtin.copy:
+        src: web.html
+        dest: /var/www/html/index.html
+        mode: '644'
