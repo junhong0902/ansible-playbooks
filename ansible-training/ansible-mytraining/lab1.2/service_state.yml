@@ -3,7 +3,8 @@
   hosts: node1
   become: true
   vars:
-    package: "httpd"
+    package: 
+      - "httpd"
 
   # tasks:
   #   - name: Check status of {{ item }} service
