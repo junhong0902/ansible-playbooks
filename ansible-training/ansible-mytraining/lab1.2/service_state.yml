@@ -6,6 +6,7 @@
   vars:
     package: 
       - httpd
+      - sshd
 
   tasks:
     - name: Check status of {{ package }} service
