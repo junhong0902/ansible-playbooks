@@ -11,6 +11,10 @@
     - name: Check status of {{ package }} service
       ansible.builtin.service_facts:
       register: service_state
+      loop:
+        - "{{ package }}"
 
     - ansible.builtin.debug:
         var: service_state.ansible_facts.services["{{ package }}.service"].state
+      loop:
+        - "{{ package }}"
