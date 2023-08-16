@@ -15,7 +15,7 @@
         - "{{ package }}"
 
     - ansible.builtin.debug:
-        var: service_state.ansible_facts.services.state
+        var: service_state.ansible_facts.services
         # var: service_state.ansible_facts.services["{{ item }}.service"].state
       # with_items:
       #   - "{{ package }}"
