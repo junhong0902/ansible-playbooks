@@ -11,7 +11,7 @@
       ansible.builtin.service_facts:
       register: service_state
       with_items:
-        - {{ package }}
+        - "{{ package }}"
 
     # - ansible.builtin.debug:
     #     var: service_state.ansible_facts.services
