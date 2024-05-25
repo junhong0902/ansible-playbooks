@@ -1,0 +1,68 @@
+---
+- name: install aap
+  hosts: aap
+  tasks:
+    - name: Creates directory
+      ansible.builtin.file:
+        path: /home/ansible/.ansible/tmp
+        state: directory
+        mode: '0777'
+      become: true
+
+    - name: download aap
+      get_url:
+        url: 
+        dest: /home/ansible/ansible-installer.tar.gz
+      become: true
+      become_user: ansible
+
+    - name: whoami
+      command: bash -c "whoami"
+      become: true
+      become_user: ansible
+      register: command_output
+    - debug: msg="{{command_output.stdout}}"    
+
+    - name: untar
+      command: bash -c "tar -xf /home/ansible/ansible-installer.tar.gz -C /home/ansible/"
+      become: true
+      become_user: ansible
+      register: command_output
+    - debug: msg="{{command_output.stdout}}"    
+
+    # - name: ls
+    #   command: bash -c "ls /home/ansible/"
+    #   become: true
+    #   become_user: ansible
+    #   register: command_output
+    # - debug: msg="{{command_output.stdout}}"    
+
+    - name: get installer directory
+      command: bash -c "ls /home/ansible | grep -E -o 'ansible-automation.{0,100}'"
+      become: true
+      become_user: ansible
+      register: command_output
+    - debug: msg="{{command_output.stdout}}"    
+
+    - set_fact:
+        ansible_fol: "{{ command_output.stdout }}"
+
+    - name: Upload inventory file
+      copy:
+        src: ./aap-install-files/inventory
+        dest: ~ansible/{{ansible_fol}}/inventory
+        owner: ansible
+        group: ansible
+        mode: '0700'   
+      become: true
+      become_user: ansible
+
+    - name: Upload ansible.cfg file
+      copy:
+        src: ./aap-install-files/ansible.cfg
+        dest: ~ansible/{{ansible_fol}}/ansible.cfg
+        owner: ansible
+        group: ansible
+        mode: '0700'  
+      become: true
+      become_user: ansible
