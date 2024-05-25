@@ -1,0 +1,7 @@
+---
+collections:
+
+# Install community.general from the Ansible Galaxy for subscription and repo manager
+- community.general
+
+# ansible-galaxy install -r requirement.yml
