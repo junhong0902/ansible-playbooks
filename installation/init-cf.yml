@@ -1,0 +1,13 @@
+---
+- name: install packages
+  hosts: cloudflare
+  become: true
+  tasks:
+    - name: download cf
+      command: bash -c "curl -L --output cloudflared.rpm https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-x86_64.rpm"
+
+    - name: install cf
+      command: bash -c "yum localinstall -y cloudflared.rpm"
+
+    - name: cf service install
+      command: bash -c "cloudflared service install <token>"
