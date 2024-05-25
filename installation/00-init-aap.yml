@@ -1,0 +1,47 @@
+---
+- name: aap init
+  hosts: aap
+  become: true
+  tasks:
+    - name: rhel subscribe
+      community.general.redhat_subscription:
+        state: present
+        username: 
+        password: 
+        pool_ids: 
+
+    - name: get latest ansible repo
+      command: bash -c "subscription-manager repos --list-disabled | grep -E -o 'ansible-automation-platform.{0,100}-x86_64-rpms' | tail -1"
+      register: command_output
+
+    - debug: msg="{{command_output.stdout}}"    
+
+    - set_fact:
+        ansible_repo: "{{ command_output.stdout }}"
+
+    - name: enable ansible repo
+      rhsm_repository:
+        name:
+          - "{{ansible_repo}}"
+        state: enabled
+
+    - name: install ansible
+      yum:
+        name: 
+          - ansible
+        state: latest
+
+    - name: Creates directory
+      ansible.builtin.file:
+        path: ~ansiblesa/.ssh/
+        state: directory
+
+    - name: Upload SSH key
+      copy:
+        src: ./ansiblesa
+        dest: ~ansible/.ssh/id_rsa
+        owner: ansible
+        group: ansible
+        mode: 0700
+        
+#ansible-playbook packages.yml
