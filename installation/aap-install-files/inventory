@@ -1,0 +1,20 @@
+[automationcontroller]
+jh-aap-aap.jhchoo.aap ansible_connection=local ansible_user=ansible
+
+
+[database]
+jh-aap-aap.jhchoo.aap ansible_connection=local ansible_user=ansible
+
+[all:vars]
+admin_password='ansible'
+pg_host='jh-aap-aap.jhchoo.aap'
+pg_port='5432'
+
+pg_database='awx'
+pg_username='awx'
+pg_password='ansible'
+pg_sslmode='prefer'
+
+registry_url='registry.redhat.io'
+registry_username=''
+registry_password=''
