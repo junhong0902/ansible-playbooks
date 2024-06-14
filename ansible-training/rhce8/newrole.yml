@@ -1,0 +1,5 @@
+- name: newrole
+  become: true
+  hosts: all
+  roles:
+    - apache

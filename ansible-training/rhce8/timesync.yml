@@ -1,0 +1,15 @@
+- name: Manage with custom advanced settings
+  hosts: all
+  vars:
+    timesync_ntp_servers:
+      - hostname: time.google.com
+        iburst: true
+  roles:
+    - rhel-system-roles.timesync
+
+- name: Set timezone
+  hosts: all
+  tasks:
+    - name: Set timezone to SG
+      community.general.timezone:
+        name: Asia/Singapore

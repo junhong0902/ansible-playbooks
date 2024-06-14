@@ -1,0 +1,61 @@
+- name: Create partition
+  hosts: node2
+  become: true
+  tasks:
+    - name: create newpart
+      block:
+        - name: Create a new primary partition with a size of 1.5GiB at disk's end
+          community.general.parted:
+            device: /dev/sdb
+            number: 1
+            state: present
+            fs_type: ext3
+            part_end: 1.5GiB
+          register: output
+
+        - debug: 
+            var: output
+      rescue:
+        - name: error msg
+          debug:
+            msg: "Could not create 1500M"
+        - name: create 800M
+          community.general.parted:
+            device: /dev/sdb
+            number: 1
+            state: present
+            fs_type: ext3
+            part_end: 800MiB
+      always:
+        - name: format ext4
+          filesystem:
+            fstype: ext4
+            dev: "/dev/sdb{{ output.partitions[0].num }}"
+        - debug: msg=/dev/sdb{{ output.partitions[0].num }}
+
+        - name: create /newpart directory
+          file:
+            path: /newpart
+            state: directory
+
+        - name: mount
+          mount: 
+            src: "/dev/sdb{{ output.partitions[0].num }}"
+            path: /newpart
+            fstype: ext4
+            state: mounted
+
+      when: "ansible_devices.sdb is defined"
+
+    - name: if vdb not exist
+      debug:
+        msg: disk does not exist
+      when: "ansible_devices.sdb is not defined"
+
+
+
+
+
+
+
+

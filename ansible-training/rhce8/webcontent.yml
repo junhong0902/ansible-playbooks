@@ -1,0 +1,61 @@
+- name: Run web content
+  hosts: node2
+  tasks:
+    - name: install pkg
+      yum:
+        name: 
+          - httpd
+          - firewalld
+        state: present
+
+    - name: create devops group
+      group:
+        name: devops
+        state: present
+
+    - name: create folder
+      file:
+        path: /webdev
+        state: directory
+        mode: '2775'
+        group: devops
+
+    - name: link
+      file:
+        src: /webdev
+        dest: /var/www/html/webdev
+        state: link
+
+    - name: create file
+      copy:
+        content: "Development"
+        dest: /webdev/index.html
+
+    - name: set selinux
+      sefcontext:
+        target: '/webdev(/.*)?'
+        setype: httpd_sys_content_t
+        state: present
+
+    - name: allow firewalld
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name: restorecon
+      shell:
+        cmd: restorecon -rv /webdev
+
+    - name: restart httpd service
+      service:
+        name: httpd
+        enabled: true
+        state: restarted
+
+    - name: restart firewalld service
+      service:
+        name: firewalld
+        enabled: true
+        state: restarted

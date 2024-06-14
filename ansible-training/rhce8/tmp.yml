@@ -1,0 +1,5 @@
+- name: output
+  hosts: all
+  tasks:
+    - debug:
+        var: hostvars

@@ -1,0 +1,10 @@
+- name: balancer
+  hosts: all
+  roles:
+    - balancer 
+
+
+- name: phpinfo
+  hosts: all
+  roles:
+    - phpinfo

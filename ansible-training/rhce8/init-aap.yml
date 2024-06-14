@@ -1,0 +1,12 @@
+---
+- name: aap init
+  hosts: all
+  become: true
+  tasks:
+    - name: rhel subscribe
+      community.general.redhat_subscription:
+        state: present
+        username: junhong.choo@izeno.com
+        password: DcD26214Redhat!
+        pool_ids: 2c94fa8a8d39769a018d39830c3b0509
+

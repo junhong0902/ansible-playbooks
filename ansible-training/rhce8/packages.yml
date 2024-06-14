@@ -1,0 +1,23 @@
+---
+- name: install pkgs
+  hosts: node1, node2
+  tasks:
+    - name: install php and mariadb
+      yum:
+        name:
+          - php
+          - mariadb
+        state: latest
+
+- name: for dev
+  hosts: node2
+  tasks:  
+    - name: Install the 'Development tools' package group
+      ansible.builtin.yum:
+        name: "@RPM Development Tools"
+        state: present
+
+    - name: Upgrade all packages
+      ansible.builtin.yum:
+        name: '*'
+        state: latest

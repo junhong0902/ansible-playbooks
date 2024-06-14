@@ -1,0 +1,25 @@
+- name: create users
+  hosts: node2
+  vars_files:
+    - ./locker.yml
+    - ./user_list.yml
+  tasks:
+    - name: create group
+      group:
+        name: student
+        state: present
+
+    - name: create user in developer
+      user:
+        name: "{{ item.name }}"
+        groups: student
+        password: "{{ pw_developer | password_hash('sha512') }}"
+        state: present
+      loop: "{{ users }}"
+      when: item.job == "developer"
+
+    - name: chage passwd time
+      shell:
+        cmd: chage -M 30 {{ item.name }}
+      loop: "{{ users }}"
+      when: item.job == "developer"

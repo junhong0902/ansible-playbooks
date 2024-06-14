@@ -1,0 +1,10 @@
+---
+users:
+  - name: student1
+    job: developer
+  - name: student2
+    job: developer
+  - name: opsmgr1
+    job: manager
+  - name: opsmgr2
+    job: manager

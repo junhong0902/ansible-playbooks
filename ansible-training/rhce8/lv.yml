@@ -1,0 +1,34 @@
+- name: Create a logical volume of 512m
+  hosts: node2
+  become: true
+  tasks:
+    - name: create data lvm
+      block:
+        - name: create 1500M
+          community.general.lvol:
+            vg: research
+            lv: data
+            size: 1500
+      rescue:
+        - name: error msg
+          debug:
+            msg: "Could not create 1500M"
+        - name: create 800M
+          community.general.lvol:
+            vg: research
+            lv: data
+            size: 800
+      always:
+        - name: format ext4
+          filesystem:
+            fstype: ext4
+            dev: /dev/research/data
+
+      when: "'research' in ansible_lvm.vgs"
+
+    - name: show error msg about vg
+      debug:
+        msg: Volume group does not exist.
+
+      when: "'research' not in ansible_lvm.vgs"
+
